@@ -4,6 +4,7 @@ import io.appium.java_client.pagefactory.AndroidFindBy;
 import io.appium.java_client.pagefactory.AppiumFieldDecorator;
 import lombok.AccessLevel;
 import lombok.Getter;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
 import test.android.todo.commons.BaseScreen;
@@ -12,6 +13,9 @@ import test.android.todo.commons.BaseScreen;
 public class MainElements extends BaseScreen {
 
     // Header
+    @AndroidFindBy(id = "app.android.todomvc:id/tvTitle")
+    private WebElement title;
+
     @AndroidFindBy(id = "app.android.todomvc:id/etNewTodo")
     private WebElement newTodoInput;
 
@@ -20,6 +24,9 @@ public class MainElements extends BaseScreen {
     private WebElement todoList;
 
     // Footer
+    @AndroidFindBy(id = "app.android.todomvc:id/footer")
+    private WebElement footer;
+
     @AndroidFindBy(id = "app.android.todomvc:id/tvItemCount")
     private WebElement itemCount;
 
@@ -37,5 +44,9 @@ public class MainElements extends BaseScreen {
 
     public MainElements() {
         PageFactory.initElements(new AppiumFieldDecorator(getDriver()), this);
+    }
+
+    protected WebElement todoCheckboxByText(String text) {
+        return getDriver().findElement(By.xpath(String.format("//android.widget.TextView[@resource-id=\"app.android.todomvc:id/tvTitle\" and @text=\"%s\"]/preceding-sibling::android.widget.CheckBox", text)));
     }
 }

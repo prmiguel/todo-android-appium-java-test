@@ -4,6 +4,7 @@ import io.appium.java_client.MobileBy;
 import io.appium.java_client.android.nativekey.AndroidKey;
 import io.appium.java_client.android.nativekey.KeyEvent;
 import org.openqa.selenium.By;
+import org.openqa.selenium.ScreenOrientation;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import test.android.todo.commons.FilterOption;
@@ -19,8 +20,7 @@ public class MainScreen extends MainElements {
 
     public void toggleTodo(String text) {
         getDriver().hideKeyboard();
-        getDriver().findElement(By.xpath(String.format("//android.widget.TextView[@resource-id=\"app.android.todomvc:id/tvTitle\" and @text=\"%s\"]/preceding-sibling::android.widget.CheckBox", text)))
-                .click();
+        todoCheckboxByText(text).click();
     }
 
     public void editTodo(String originalText, String newText) {
@@ -57,6 +57,12 @@ public class MainScreen extends MainElements {
         getClearCompletedFab().click();
     }
 
+    public void cancelEditTodo(String originalText) {
+        WebElement todo = findTodoElementByText(originalText);
+        todo.click();
+        getWait().until(ExpectedConditions.visibilityOfElementLocated(By.id("android:id/button2"))).click(); // Cancel button
+    }
+
     // --- Verifications ---
     public boolean isTodoDisplayed(String text) {
         try {
@@ -68,17 +74,37 @@ public class MainScreen extends MainElements {
     }
 
     public boolean isTodoChecked(String text) {
-        WebElement todo = findTodoElementByText(text);
-        return todo.findElement(By.id("app.android.todomvc:id/cbCompleted")).isSelected();
+        return todoCheckboxByText(text).isSelected();
     }
 
     public String getItemCountText() {
         return getWait().until(ExpectedConditions.visibilityOf(super.getItemCount())).getText();
     }
 
-    public boolean isFilterFabVisible() {
-        return getFilterFab().isDisplayed();
+    public boolean isTitleDisplayed() {
+        return getTitle().isDisplayed();
     }
+
+    public boolean isInputFieldDisplayed() {
+        return getNewTodoInput().isDisplayed();
+    }
+
+    public boolean isFooterDisplayed() {
+        try {
+            return getFooter().isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public boolean isFilterFabVisible() {
+        try {
+            return getFilterFab().isDisplayed();
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
 
     public boolean isClearCompletedFabVisible() {
         return getClearCompletedFab().isDisplayed();
@@ -93,5 +119,14 @@ public class MainScreen extends MainElements {
     private WebElement findTodoElementByText(String text) {
         String uiAutomator = "new UiSelector().text(\"" + text + "\")";
         return getDriver().findElement(new MobileBy.ByAndroidUIAutomator(uiAutomator));
+    }
+
+    public void rotate(ScreenOrientation orientation) {
+        getDriver().rotate(orientation);
+    }
+
+    public void reopen() {
+        getDriver().terminateApp("app.android.todomvc");
+        getDriver().activateApp("app.android.todomvc");
     }
 }

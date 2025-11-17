@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "https://testng.org/testng-1.0.dtd">
-<suite name="Todo Automation Suite" parallel="tests" thread-count="1">
+<suite name="TodoMVC Automation Suite" parallel="tests" thread-count="1">
 
     <test name="Smoke Tests">
         <groups>
@@ -8,6 +8,10 @@
                 <include name="smoke"/>
             </run>
         </groups>
+        <classes>
+            <class name="test.android.todo.test.ApplicationLaunchTest"/>
+            <class name="test.android.todo.test.DataPersistenceOnRestartTest"/>
+        </classes>
     </test>
 
     <test name="Functional Tests">
@@ -18,7 +22,34 @@
             </run>
         </groups>
         <classes>
+            <class name="test.android.todo.test.AddValidTodoTest"/>
+            <class name="test.android.todo.test.AddEmptyTodoTest"/>
+            <class name="test.android.todo.test.ToggleTodoStatusTest"/>
+            <class name="test.android.todo.test.EditTodoItemTest"/>
+            <class name="test.android.todo.test.CancelEditingTodoTest"/>
+            <class name="test.android.todo.test.DeleteTodoItemTest"/>
+            <class name="test.android.todo.test.FilterByActiveTest"/>
             <class name="test.android.todo.test.FilterByCompletedTest"/>
+            <class name="test.android.todo.test.ClearCompletedFabVisibilityTest"/>
+            <class name="test.android.todo.test.ClearCompletedTodosTest"/>
         </classes>
     </test>
+
+    <test name="Regression And Other Tests">
+        <groups>
+            <run>
+                <include name="regression"/>
+                <include name="persistence"/>
+                <include name="ui"/>
+                <include name="robustness"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="test.android.todo.test.FabVisibilityLogicTest"/>
+            <class name="test.android.todo.test.DataPersistenceOnRotationTest"/>
+            <class name="test.android.todo.test.RapidInteractionTest"/>
+            <class name="test.android.todo.test.LongTodoTextTest"/>
+        </classes>
+    </test>
+
 </suite>
